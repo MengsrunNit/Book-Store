@@ -7,6 +7,8 @@ const path = require('path')
 app.set('view engine', 'ejs');
 app.set('views', 'templates');
 
+const sequelize = require('./util/database')
+
 const adminRoute = require('./routes/admin'); 
 const shopRoute = require('./routes/shop');
 
@@ -24,4 +26,12 @@ app.use('/',shopRoute);
 app.use(errorController.error404)
 
 const server = http.createServer(app)
-server.listen(3000);
+
+sequelize.sync()
+    .then(result=>{
+        server.listen(3000);
+    })
+    .catch(err=>{
+    console.log(err);
+    
+});
