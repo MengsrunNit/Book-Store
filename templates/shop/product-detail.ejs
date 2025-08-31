@@ -1,0 +1,17 @@
+<%- include('../includes/head') %>
+<body>
+    <%- include('../includes/navigation') %>
+    <main>
+        <h1><%=prod.title%></h1>
+        <hr>
+        <div>
+            <img src="<%= prod.imageUrl%>" alt = "<%= prod.title%>">
+        </div>
+        <h2> Price:$<%= prod.price%></h2>
+        <p> Description: <%= prod.description%></p>
+    </main>
+
+</body>
+
+</html>
+
