@@ -25,7 +25,7 @@ exports.getAddProduct = (req, res, next) => {
 
     await product.save();
     console.log('Product added:', product); 
-    res.redirect('/');
+    res.redirect('/admin/products');
     }
     catch(err){
       console.log(err);
@@ -64,11 +64,22 @@ exports.getAddProduct = (req, res, next) => {
       })
   }
 
+  //exports postDeleteProduct that get the productId from the req.body and then delete that data in the database
+
+
   exports.postDeleteProduct = (req, res, next) =>{
     const productId = req.body.productId;
-    Product.deleteById(productId);
-    res.redirect('/admin/products')
-  }
+    Product.findByPk(productId).then(product =>{
+      return product.destroy();
+    })
+    .then(result =>{
+      console.log('Deleted Product');
+       res.redirect('/admin/products')
+    })
+    .catch(err=>{console.log(err);
+   
+  });
+};
 
   exports.postEditProduct = (req, res, next)=>{
     const productId = req.body.productId;
@@ -78,6 +89,9 @@ exports.getAddProduct = (req, res, next) => {
     const updatedDesc = req.body.description; 
 
     Product.findByPk(productId).then(product =>{  
+      if (!product){
+        return res.redirect('/admin/products');
+      }
       product.title = updatedTitle;
       product.price = updatedPrice;
       product.imageUrl = updatedImageUrl;
@@ -91,4 +105,5 @@ exports.getAddProduct = (req, res, next) => {
     .catch(err=>{console.log(err);
     });
   } 
+  
   

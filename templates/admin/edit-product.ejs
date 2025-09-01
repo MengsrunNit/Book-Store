@@ -1,9 +1,9 @@
 <%- include('../includes/head') %>
 <body>
     <%- include('../includes/navigation') %>
-
     <main>
         <form class="product-form" action="/admin/<%= editing? "edit-product":"add-product"%>" method="POST">
+            <input type="hidden" name="productId" value="<%= editing ? product.id : "" %>">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input type="text" name="title" id="title" value="<%= editing ? product.title: "" %>">
