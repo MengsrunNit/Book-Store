@@ -23,10 +23,6 @@ User.hasMany(Product);
 
 app.use(express.static(path.join(rootDir, "public"))); // CSS static access
 
-app.use("/admin", adminRoute);
-app.use("/", shopRoute);
-
-app.use(errorController.error404);
 app.use((req, res, next) => {
   User.findByPk(1)
     .then((user) => {
@@ -35,12 +31,19 @@ app.use((req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+
+app.use("/admin", adminRoute);
+app.use("/", shopRoute);
+
+app.use(errorController.error404);
+
 const server = http.createServer(app);
 
 sequelize
   .sync() // {force: true} to drop the table and re-create it
   .then((result) => {
-    User.findByPk(1);
+    // fixed : return the user from findByPk
+    return User.findByPk(1);
   })
   .then((user) => {
     if (!user) {
