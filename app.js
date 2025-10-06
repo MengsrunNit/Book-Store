@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const http = require("http");
 const express = require("express");
 const app = express();
@@ -11,6 +11,8 @@ app.set("views", "templates");
 const sequelize = require("./util/database");
 const User = require("./models/users");
 const Product = require("./models/product");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
 
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
@@ -21,6 +23,10 @@ const errorController = require("./controllers/error");
 
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 app.use(express.static(path.join(rootDir, "public"))); // CSS static access
 
@@ -53,7 +59,11 @@ sequelize
     return user;
   })
   .then((user) => {
+    return user.createCart();
+  })
+  .then((cart) => {
     server.listen(3000);
+    console.log("Server running at http://localhost:3000");
   })
   .catch((err) => {
     console.log(err);
