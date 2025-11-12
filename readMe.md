@@ -12,3 +12,4 @@ Book-Store is a Node.js web application for managing and browsing books. It allo
 - Error handling for 404 pages
 
 ## Project Structure
+- MongoDB
