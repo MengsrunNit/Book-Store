@@ -3,16 +3,20 @@ const MongoClient = mongodb.MongoClient;
 
 let _db; 
 
-const mongoConnect = (callback) =>{
-  MongoClient.connect('mongodb+srv://nitmengsrun_db:Mengsrun27@cluster0.7bivgbo.mongodb.net/book-store?appName=Cluster0')
-    .then(client => {
+const mongoConnect = (callback) => {
+  const uri = process.env.MONGO_URI;
+  if (!uri) {
+    throw new Error('MONGO_URI is not set. Add it to your .env file.');
+  }
+  MongoClient.connect(uri)
+    .then((client) => {
       console.log('Connected to MongoDB');
       _db = client.db();
       callback();
     })
-    .catch(err =>{
+    .catch((err) => {
       console.log(err);
-    })
+    });
 };
 
 const getDb = () =>{
