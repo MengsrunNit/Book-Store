@@ -1,15 +1,26 @@
-const Sequelize = require("sequelize");
-require("dotenv").config();
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASS,
-  {
-    host: process.env.DB_HOST,
-    dialect: "mysql",
-    logging: false, // Add this line to disable query logging
+let _db; 
+
+const mongoConnect = (callback) =>{
+  MongoClient.connect('mongodb+srv://nitmengsrun_db:Mengsrun27@cluster0.7bivgbo.mongodb.net/book-store?appName=Cluster0')
+    .then(client => {
+      console.log('Connected to MongoDB');
+      _db = client.db();
+      callback();
+    })
+    .catch(err =>{
+      console.log(err);
+    })
+};
+
+const getDb = () =>{
+  if (_db){
+    return _db;
   }
-);
+  throw 'No database found!';
+}
 
-module.exports = sequelize;
+exports.getDb = getDb;
+exports.mongoConnect = mongoConnect;
