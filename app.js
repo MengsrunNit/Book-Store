@@ -29,8 +29,24 @@ app.use(errorController.error404);
 
 const server = http.createServer(app);
 
+// mongoConnect(() => {  
+//   console.log("Connected to MongoDB");
+//   app.listen(3000);
+// });
+
+
 mongoConnect(() => {  
   console.log("Connected to MongoDB");
-  app.listen(3000);
-});
 
+  const port = process.env.PORT || 3000; // <-- Important for Railway
+
+  // Option 1: use app.listen
+  app.listen(port, "0.0.0.0", () => {
+    console.log(`Server is running on port ${port}`);
+  });
+
+  // Option 2 (alternative): use the http server instead
+  // server.listen(port, "0.0.0.0", () => {
+  //   console.log(`Server is running on port ${port}`);
+  // });
+});
