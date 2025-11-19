@@ -3,13 +3,13 @@ const getDb = require("../util/database").getDb;
 const ObjectId = require("mongodb").ObjectId;
 
 class Product {
-    constructor(title, price, imageUrl, description, id) {
+    constructor(title, price, imageUrl, description, id, userId) {
         this.title = title;
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;
-        // Only assign _id if provided; don't wrap undefined and don't create a new ObjectId for create path
         this._id = id ? new ObjectId(id) : null;
+        this.userId = userId;
     }
 
     save() {
@@ -21,6 +21,7 @@ class Product {
                 price: this.price,
                 imageUrl: this.imageUrl,
                 description: this.description,
+                userId: this.userId
             };
             return db.collection('products').updateOne({ _id: this._id }, { $set: updateDoc });
         }
@@ -30,23 +31,24 @@ class Product {
             price: this.price,
             imageUrl: this.imageUrl,
             description: this.description,
+            userId: this.userId
         };
         return db.collection('products').insertOne(insertDoc);
     }
 
-    static fetchAll(){
-        const db = getDb(); 
+    static fetchAll() {
+        const db = getDb();
         return db.collection('products')
             .find()
             .toArray();
     }
 
-    static findById(prodId){
+    static findById(prodId) {
         const db = getDb();
-        return db.collection('products').find({ _id : new ObjectId(prodId) }).next();
+        return db.collection('products').find({ _id: new ObjectId(prodId) }).next();
     }
 
-    static deleteById(prodId){
+    static deleteById(prodId) {
         const db = getDb();
         return db.collection('products').deleteOne({ _id: new ObjectId(prodId) });
     }

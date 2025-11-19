@@ -28,7 +28,7 @@ exports.postAddProduct = async (req, res, next) => {
   }
 
   try {
-    const product = new Product(title, price, imageUrl, description);
+    const product = new Product(title, price, imageUrl, description, null, req.user._id);
     const result = await product.save();
     console.log("Product Created", result?.insertedId || result?.acknowledged);
     res.redirect("/admin/products");
@@ -117,7 +117,7 @@ exports.postEditProduct = async (req, res, next) => {
       pageTitle: "Edit Product",
       path: "/admin/edit-product",
       editing: true,
-      product: { _id: productId, title: updatedTitle, imageUrl: updatedImageUrl, price: updatedPriceRaw, description: updatedDesc },
+      product: {title: updatedTitle, imageUrl: updatedImageUrl, price: updatedPriceRaw, description: updatedDesc, _id: productId },
       errorMessage: "All fields are required and price must be a number.",
     });
   }
