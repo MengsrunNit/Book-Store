@@ -32,7 +32,7 @@ app.use((req,res, next) =>{
       console.log("User not found");
       return next();
     }
-    req.user = user
+    req.user = new User(user.name, user.email, user.cart, user._id);
     console.log("hello")
     next();
   })
