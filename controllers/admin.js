@@ -28,7 +28,14 @@ exports.postAddProduct = async (req, res, next) => {
   }
 
   try {
-    const product = new Product(title, price, imageUrl, description, null, req.user._id);
+    const product = new Product(
+      title,
+      price,
+      imageUrl,
+      description,
+      null,
+      req.user._id
+    );
     const result = await product.save();
     console.log("Product Created", result?.insertedId || result?.acknowledged);
     res.redirect("/admin/products");
@@ -38,46 +45,45 @@ exports.postAddProduct = async (req, res, next) => {
   }
 };
 
-  // req.user
-  //   .createProduct({
-  //     title: title,
-  //     price: price,
-  //     imageUrl: imageUrl,
-  //     description: description,
-  //   })
-  //   .then((product) => {
-  //     console.log("Product added:", product.title);
-  //     res.redirect("/admin/products");
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //     next(err);
-  //   });
+// req.user
+//   .createProduct({
+//     title: title,
+//     price: price,
+//     imageUrl: imageUrl,
+//     description: description,
+//   })
+//   .then((product) => {
+//     console.log("Product added:", product.title);
+//     res.redirect("/admin/products");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//     next(err);
+//   });
 
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.editMode === "true";
   console.log("Edit Mode:", editMode);
-  console.log("hello");
   if (!editMode) {
     return res.redirect("/");
   }
   const productId = req.params.productId;
   Product.findById(productId)
-  .then((product) => {
-    if (!product) {
-      return res.redirect("/");
-    }
-    res.render("admin/edit-product", {
-      pageTitle: "Add Product",
-      path: "/admin/edit-product",
-      editing: true,
-      product: product,
+    .then((product) => {
+      if (!product) {
+        return res.redirect("/");
+      }
+      res.render("admin/edit-product", {
+        pageTitle: "Add Product",
+        path: "/admin/edit-product",
+        editing: true,
+        product: product,
+      });
     })
-  }).catch((err) => {
-    console.log(err);
-  });
+    .catch((err) => {
+      console.log(err);
+    });
 };
-
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll().then((products) => {
@@ -112,12 +118,24 @@ exports.postEditProduct = async (req, res, next) => {
   const updatedDesc = (req.body.description || "").trim();
   const updatedPrice = parseFloat(updatedPriceRaw);
 
-  if (!productId || !updatedTitle || !updatedImageUrl || !updatedDesc || isNaN(updatedPrice)) {
+  if (
+    !productId ||
+    !updatedTitle ||
+    !updatedImageUrl ||
+    !updatedDesc ||
+    isNaN(updatedPrice)
+  ) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Edit Product",
       path: "/admin/edit-product",
       editing: true,
-      product: {title: updatedTitle, imageUrl: updatedImageUrl, price: updatedPriceRaw, description: updatedDesc, _id: productId },
+      product: {
+        title: updatedTitle,
+        imageUrl: updatedImageUrl,
+        price: updatedPriceRaw,
+        description: updatedDesc,
+        _id: productId,
+      },
       errorMessage: "All fields are required and price must be a number.",
     });
   }
@@ -131,7 +149,10 @@ exports.postEditProduct = async (req, res, next) => {
       productId
     );
     const result = await product.save();
-    console.log("Product Updated", result?.modifiedCount || result?.acknowledged);
+    console.log(
+      "Product Updated",
+      result?.modifiedCount || result?.acknowledged
+    );
     res.redirect("/admin/products");
   } catch (err) {
     console.error("Edit Product Error:", err);
