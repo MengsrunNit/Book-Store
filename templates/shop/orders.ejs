@@ -14,7 +14,7 @@
                         <ul class="orders__products">
                             <% order.products.forEach(p => { %>
                                 <li class="orders__products-item">
-                                    <span><%= p.title %></span>
+                                    <span><%= p.products.title %></span>
                                     <span>Quantity: <%= p.quantity %></span>
                                 </li>
                             <% }); %>

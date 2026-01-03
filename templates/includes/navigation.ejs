@@ -1,6 +1,10 @@
 <div class="backdrop"></div>
 <header class="main-header">
-  <button id="side-menu-toggle">Menu</button>
+  <button id="side-menu-toggle" aria-label="Toggle navigation">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
   <nav class="main-header__nav">
     <ul class="main-header__item-list">
       <li class="main-header__item">
@@ -32,6 +36,21 @@
           class="<%= path ==='/admin/products' ? 'active' : ''%>"
           href="/admin/products"
           >Admin Products</a
+        >
+      </li>
+
+      <li class="main-header__item">
+        <a
+          class="<%= path ==='/login' ? 'active' : ''%>"
+          href="/login"
+          >Sign in</a
+        >
+      </li>
+      <li class="main-header__item">
+        <a
+          class="<%= path ==='/signup' ? 'active' : ''%>"
+          href="/signup"
+          >Sign up</a
         >
       </li>
     </ul>
@@ -68,6 +87,16 @@
         class="<%= path ==='/admin/products' ? 'active' : ''%>"
         href="/admin/products"
         >Admin Products</a
+      >
+    </li>
+    <li class="mobile-nav__item">
+      <a class="<%= path ==='/signin' ? 'active' : ''%>" href="/signin"
+        >Sign in</a
+      >
+    </li>
+    <li class="mobile-nav__item">
+      <a class="<%= path ==='/signup' ? 'active' : ''%>" href="/signup"
+        >Sign up</a
       >
     </li>
   </ul>

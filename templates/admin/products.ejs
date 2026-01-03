@@ -20,10 +20,9 @@
                         </div>
                         <div class="card__actions">
                             <a class="btn" href="/admin/edit-product/<%= prod._id.toString() %>?editMode=true">Edit</a>
-                        
                             <form action="/admin/delete-product" method="POST">
                                 <input type="hidden" value="<%= (prod._id && prod._id.toString) ? prod._id.toString() : '' %>" name="productId">
-                                <button class="btn" type="submit">Delete</button>
+                                <button class="btn danger" type="submit">Delete</button>
                             </form>
                         </div>
                     </article>

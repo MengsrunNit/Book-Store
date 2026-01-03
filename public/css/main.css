@@ -110,6 +110,22 @@ body {
   background: transparent;
   color: white;
   cursor: pointer;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 6px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+#side-menu-toggle .bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: white;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
 }
 
 #side-menu-toggle:focus {
@@ -120,6 +136,11 @@ body {
 #side-menu-toggle:hover {
   color: #ffeb3b;
   border-color: #ffeb3b;
+}
+
+#side-menu-toggle:hover .bar,
+#side-menu-toggle:active .bar {
+  background-color: #ffeb3b;
 }
 
 .backdrop {
@@ -150,7 +171,7 @@ body {
   }
 
   #side-menu-toggle {
-    display: block; /* Show hamburger */
+    display: flex; /* Show hamburger */
   }
 
   .main-header {

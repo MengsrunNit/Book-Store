@@ -7,18 +7,24 @@
 .form-control textarea {
   display: block;
   width: 100%;
-  margin-botton: 0.25 rem;
+  margin-bottom: 0.25rem;
 }
 
 .form-control input,
 .form-control textarea {
-  border: 1px solid #a1a1a1;
+  border: 1px solid #cfd8dc;
   font: inherit;
-  border-radius: 2px;
+  border-radius: 8px;
   box-sizing: border-box;
+  padding: 0.85rem 1rem;
+  background: #f9fafb;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .form-control input:focus,
 .form-control textarea:focus {
-  outline-color: #00695;
+  outline: none;
+  border-color: #3e00a1;
+  box-shadow: 0 0 0 3px rgba(62, 0, 161, 0.12);
+  background: #fff;
 }

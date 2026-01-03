@@ -16,50 +16,15 @@ exports.postAddProduct = async (req, res, next) => {
   const priceRaw = req.body.price;
   const description = (req.body.description || "").trim();
   const price = parseFloat(priceRaw);
+  const product = new Product({title: title, price: price, imageUrl: imageUrl, description: description, userId: req.user});
 
-  if (!title || !imageUrl || !description || isNaN(price)) {
-    return res.status(422).render("admin/edit-product", {
-      pageTitle: "Add Product",
-      path: "/admin/add-product",
-      editing: false,
-      product: { title, imageUrl, price: priceRaw, description },
-      errorMessage: "All fields are required and price must be a number.",
-    });
-  }
-
-  try {
-    const product = new Product(
-      title,
-      price,
-      imageUrl,
-      description,
-      null,
-      req.user._id
-    );
-    const result = await product.save();
-    console.log("Product Created", result?.insertedId || result?.acknowledged);
-    res.redirect("/admin/products");
-  } catch (err) {
-    console.error("Add Product Error:", err);
-    next(err);
-  }
+  product.save()
+    .then(() => {
+      console.log("Product Created");
+      res.redirect("/admin/products");
+    })
+    .catch(next);
 };
-
-// req.user
-//   .createProduct({
-//     title: title,
-//     price: price,
-//     imageUrl: imageUrl,
-//     description: description,
-//   })
-//   .then((product) => {
-//     console.log("Product added:", product.title);
-//     res.redirect("/admin/products");
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//     next(err);
-//   });
 
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.editMode === "true";
@@ -86,7 +51,8 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll().then((products) => {
+  Product.find()
+    .then((products) => {
     res.render("admin/products", {
       prods: products,
       pageTitle: "admin Product",
@@ -99,12 +65,12 @@ exports.getProducts = (req, res, next) => {
 exports.postDeleteProduct = (req, res, next) => {
   const productId = req.body.productId;
   console.log("you are in PostDeleteProduct");
-  Product.deleteById(productId)
-    .then(() => {
+  Product.findByIdAndDelete(productId)
+  .then(() => {
       console.log("Product Deleted");
       res.redirect("/admin/products");
     })
-    .catch((err) => {
+  .catch((err) => {
       console.log(err);
       next(err);
     });
@@ -118,44 +84,20 @@ exports.postEditProduct = async (req, res, next) => {
   const updatedDesc = (req.body.description || "").trim();
   const updatedPrice = parseFloat(updatedPriceRaw);
 
-  if (
-    !productId ||
-    !updatedTitle ||
-    !updatedImageUrl ||
-    !updatedDesc ||
-    isNaN(updatedPrice)
-  ) {
-    return res.status(422).render("admin/edit-product", {
-      pageTitle: "Edit Product",
-      path: "/admin/edit-product",
-      editing: true,
-      product: {
-        title: updatedTitle,
-        imageUrl: updatedImageUrl,
-        price: updatedPriceRaw,
-        description: updatedDesc,
-        _id: productId,
-      },
-      errorMessage: "All fields are required and price must be a number.",
-    });
-  }
-
-  try {
-    const product = new Product(
-      updatedTitle,
-      updatedPrice,
-      updatedImageUrl,
-      updatedDesc,
-      productId
-    );
-    const result = await product.save();
-    console.log(
-      "Product Updated",
-      result?.modifiedCount || result?.acknowledged
-    );
+  Product.findById(productId)
+  .then(product => {
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.imageUrl = updatedImageUrl;
+    product.description = updatedDesc;
+    return product.save();
+  })
+  .then(result => {
+    console.log("Product Updated", result);
     res.redirect("/admin/products");
-  } catch (err) {
+  })
+  .catch(err => {
     console.error("Edit Product Error:", err);
     next(err);
-  }
+  });
 };

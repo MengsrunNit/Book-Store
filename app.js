@@ -11,48 +11,56 @@ app.set("views", "templates");
 const rootDir = require("./util/path");
 app.use(bodyParser.urlencoded({ extended: false }));
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database").mongoConnect;
-const User = require("./models/users");
+// const mongoConnect = require("./util/database").mongoConnect;
+const mongoose = require('mongoose');
+const User = require('./models/users');
 
 // add admin route and shop route
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
+const authRoutes = require('./routes/auth');
 
 app.use(express.static(path.join(rootDir, "public"))); // CSS static access
 
-//middleware
 app.use((req, res, next) => {
-  User.findById("6916c4bc8a3898af1f1b0939")
-    .then((user) => {
-      if (!user) {
-        console.log("User not found");
-        return next();
-      }
-      req.user = new User(user.name, user.email, user.cart, user._id);
-      next();
-    })
-    .catch((err) => console.log(err));
+  User.findById('69573eb519408dc1c742c79f')
+  .then(user =>{
+    req.user = user; 
+    next();
+  })
+  .catch(err => console.log(err));
 });
 
 app.use("/admin", adminRoute);
 app.use(shopRoute);
+app.use(authRoutes);
 
 app.use(errorController.error404);
 
 const server = http.createServer(app);
 
-// mongoConnect(() => {
-//   console.log("Connected to MongoDB");
-//   app.listen(3000);
-// });
 
-mongoConnect(() => {
-  console.log("Connected to MongoDB");
-
-  const port = process.env.PORT || 3000; // <-- Important for Railway
-
-  // Option 1: use app.listen
-  app.listen(port, "0.0.0.0", () => {
-    console.log(`Server is running on port ${port}`);
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    return User.findOne();
+  })
+  .then(user => {
+    if (!user) {
+      const newUser = new User({
+        name: 'Mengsrun',
+        email: 'nitmengsrun@gmail.com',
+        cart: {
+          items: []
+        }
+      });
+      return newUser.save();
+    }
+  })
+  .then(() => {
+    console.log('Connected to MongoDB');
+    server.listen(3000);
+  })
+  .catch(err => {
+    console.log(err);
   });
-});

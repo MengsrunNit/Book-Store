@@ -4,36 +4,51 @@
 
 <body>
     <%- include('../includes/navigation.ejs') %>
-    <main>
-        <% if (products.length > 0) { %>
-            <ul class="cart__item-list">
-                <% products.forEach(p => { %>
-                    <li class="cart__item">
-                        <div class="cart__item-img">
-                            <img src="<%= p.imageUrl %>" alt="<%= p.title %>">
-                        </div>
-                        <div class="cart__item-details">
-                            <h1><%= p.title %></h1>
-                            <h2>Price: $<%= p.price %></h2>
-                            <h2>Quantity: <%= p.quantity %></h2>
-                        </div>
-                        <div class="cart__item-actions">
-                            <form action="/cart-delete-item" method="POST">
-                                <input type="hidden" value="<%= p._id %>" name="productId">
-                                <button class="btn danger" type="submit">Delete</button>
-                            </form>
-                        </div>
-                    </li>
-                <% }) %>
-            </ul>
-            <div class="centered">
-                <form action="/create-order" method="POST">
-                    <button type="submit" class="btn">Order Now!</button>
+        <main class="cart">
+        <h1 class="cart__title">Your Cart</h1>
+
+        <% if (products && products.length > 0) { %>
+            <ul class="cart__list">
+            <% products.forEach(p => { %>
+                <li class="cart__row">
+                <img
+                    class="cart__image"
+                    src="<%= p.productId.imageUrl %>"
+                    alt="<%= p.productId.title %>"
+                >
+
+                <div class="cart__info">
+                    <strong class="cart__name"><%= p.productId.title %></strong>
+
+                    <div class="cart__meta">
+                    $<%= Number(p.productId.price).toFixed(2) %>
+                    × <%= p.quantity %>
+                    = <strong>$<%= (p.productId.price * p.quantity).toFixed(2) %></strong>
+                    </div>
+                </div>
+
+                <form class="cart__remove" action="/cart-delete-item" method="POST">
+                    <input type="hidden" value="<%= p.productId._id %>" name="productId">
+                    <button type="submit" class="cart__remove-btn">✕</button>
                 </form>
+                </li>
+            <% }) %>
+            </ul>
+
+            <div class="cart__footer">
+            <div class="cart__total">
+                Total: <strong>$<%= Number(totalPrice).toFixed(2) %></strong>
             </div>
+
+            <form action="/create-order" method="POST">
+                <button type="submit" class="btn">Checkout</button>
+            </form>
+            </div>
+
         <% } else { %>
-            <h1>No Products in Cart!</h1>
+            <p class="cart__empty">Your cart is empty.</p>
         <% } %>
-    </main>
+        </main>
+
 </body>
 </html>

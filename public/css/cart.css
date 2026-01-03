@@ -1,121 +1,149 @@
-.cart__item-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin: auto;
-  width: 40rem;
-  max-width: 95%;
+/* Layout */
+.cart {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
 }
 
-.cart__item {
+.cart__title {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* List */
+.cart__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.cart__row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 1rem;
-  margin-bottom: 1rem;
-  background-color: white;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #f1f1f1;
 }
 
-.cart__item-img img {
-  width: 5rem;
-  height: 5rem;
+.cart__row:last-child {
+  border-bottom: none;
+}
+
+/* Image */
+.cart__image {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
   object-fit: cover;
-  margin-right: 1rem;
-  border-radius: 5px;
+  background: #f7f7f7;
+  border: 1px solid #eee;
+  flex: 0 0 auto;
 }
 
-.cart__item-details {
+/* Info */
+.cart__info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  min-width: 0; /* allows text truncation */
 }
 
-.cart__item-details h1 {
-  font-size: 1.2rem;
-  margin: 0 0 0.5rem 0;
+.cart__name {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart__meta {
+  font-size: 0.92rem;
+  color: #555;
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.cart__meta strong {
+  color: #111;
+  font-weight: 700;
+}
+
+/* Remove */
+.cart__remove {
+  flex: 0 0 auto;
+}
+
+.cart__remove-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid #e9e9e9;
+  background: #fafafa;
+  color: #777;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.cart__remove-btn:hover {
+  background: #fff0f0;
+  border-color: #ffd0d0;
+  color: #c0392b;
+}
+
+/* Footer */
+.cart__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cart__total {
+  font-size: 1.05rem;
   color: #333;
 }
 
-.cart__item-details h2 {
-  font-size: 1rem;
-  margin: 0;
-  color: #555;
+.cart__total strong {
+  font-size: 1.2rem;
+  color: #111;
 }
 
-.cart__item-actions {
-  margin-left: 1rem;
-}
-
-.centered {
-  text-align: center;
-  margin-top: 2rem;
-}
-
-.btn.danger {
-  color: #da2929;
-  background: transparent;
-  border: 1px solid #da2929;
-}
-
-.btn.danger:hover,
-.btn.danger:active {
-  background: #da2929;
-  color: white;
-}
-
-/* 📱 Responsive for Mobile */
-@media (max-width: 768px) {
-  .cart-card {
-    width: 95%;
+/* Mobile */
+@media (max-width: 600px) {
+  .cart__row {
+    gap: 0.75rem;
+    padding: 0.85rem;
   }
 
-  .cart__item {
+  .cart__image {
+    width: 54px;
+    height: 54px;
+    border-radius: 10px;
+  }
+
+  .cart__footer {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: stretch;
   }
 
-  .cart__item-img img {
-    width: 8rem;
-    height: 8rem;
-    margin-right: 0;
-    margin-bottom: 1rem;
-  }
-
-  .cart__item-details {
-    margin-bottom: 1rem;
-  }
-
-  .cart__item-actions {
-    margin-left: 0;
-  }
-}
-.cart-card p {
-  font-size: 0.95rem;
-  color: #555;
-  margin: 5px 0;
-}
-
-.btn {
-  background-color: #ff5757;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  cursor: pointer;
-  margin-bottom: 15px;
-  transition: background-color 0.2s ease;
-}
-
-.btn:hover {
-  background-color: #e04c4c;
-}
-
-/* 📱 Responsive for Mobile */
-@media (max-width: 768px) {
-  .cart-card {
-    width: 90%;
+  .cart__footer .btn {
+    width: 100%;
   }
 }
