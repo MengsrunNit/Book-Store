@@ -1,0 +1,25 @@
+/* Make the top nav list a flex row */
+.main-header__item-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Space between the left links */
+.main-header__item {
+  margin-right: 1rem;
+}
+
+/* Push the Sign in item to the far right */
+.main-header__item--auth {
+  margin-left: auto;
+  margin-right: 0; /* override the .main-header__item margin-right */
+}
+
+/* Optional: add separator before Sign in */
+.main-header__item--auth a {
+  padding-left: 1.5rem;
+  border-left: 1px solid #ccc;
+}
